@@ -23,19 +23,47 @@ public class SnippetDAO extends GenericDAO<Snippet> {
     }
 
     /**
+     * Sobrescribe el findAll del GenericDAO.
+     *
+     * En Snippet hace falta cargar también las relaciones:
+     * usuario, lenguaje, categoría y etiquetas.
+     *
+     * Si no se hace con JOIN FETCH, Hibernate cierra la sesión y luego
+     * la vista no puede acceder a s.getLanguage().getName(), etc.
+     */
+    @Override
+    public List<Snippet> findAll() {
+        EntityManager em = HibernateUtil.getEntityManager();
+
+        try {
+            return em.createQuery(
+                    "SELECT DISTINCT s FROM Snippet s " +
+                            "LEFT JOIN FETCH s.user " +
+                            "LEFT JOIN FETCH s.language " +
+                            "LEFT JOIN FETCH s.category " +
+                            "LEFT JOIN FETCH s.tags",
+                    Snippet.class
+            ).getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    /**
      * Busca snippets por una palabra clave.
      *
      * La búsqueda se hace en el título, descripción y código fuente.
-     *
-     * @param keyword palabra clave que se quiere buscar
-     * @return lista de snippets encontrados
      */
     public List<Snippet> searchByKeyword(String keyword) {
         EntityManager em = HibernateUtil.getEntityManager();
 
         try {
             return em.createQuery(
-                            "SELECT s FROM Snippet s " +
+                            "SELECT DISTINCT s FROM Snippet s " +
+                                    "LEFT JOIN FETCH s.user " +
+                                    "LEFT JOIN FETCH s.language " +
+                                    "LEFT JOIN FETCH s.category " +
+                                    "LEFT JOIN FETCH s.tags " +
                                     "WHERE LOWER(s.title) LIKE LOWER(:keyword) " +
                                     "OR LOWER(s.description) LIKE LOWER(:keyword) " +
                                     "OR LOWER(s.sourceCode) LIKE LOWER(:keyword)",
@@ -52,16 +80,17 @@ public class SnippetDAO extends GenericDAO<Snippet> {
      * Busca snippets por título.
      *
      * Este método es necesario porque SnippetPanel llama a searchByTitle().
-     *
-     * @param title texto del título a buscar
-     * @return lista de snippets cuyo título contiene el texto indicado
      */
     public List<Snippet> searchByTitle(String title) {
         EntityManager em = HibernateUtil.getEntityManager();
 
         try {
             return em.createQuery(
-                            "SELECT s FROM Snippet s " +
+                            "SELECT DISTINCT s FROM Snippet s " +
+                                    "LEFT JOIN FETCH s.user " +
+                                    "LEFT JOIN FETCH s.language " +
+                                    "LEFT JOIN FETCH s.category " +
+                                    "LEFT JOIN FETCH s.tags " +
                                     "WHERE LOWER(s.title) LIKE LOWER(:title)",
                             Snippet.class
                     )
@@ -74,16 +103,18 @@ public class SnippetDAO extends GenericDAO<Snippet> {
 
     /**
      * Busca snippets por lenguaje de programación.
-     *
-     * @param languageId id del lenguaje
-     * @return lista de snippets de ese lenguaje
      */
     public List<Snippet> findByLanguage(Long languageId) {
         EntityManager em = HibernateUtil.getEntityManager();
 
         try {
             return em.createQuery(
-                            "SELECT s FROM Snippet s WHERE s.language.id = :languageId",
+                            "SELECT DISTINCT s FROM Snippet s " +
+                                    "LEFT JOIN FETCH s.user " +
+                                    "LEFT JOIN FETCH s.language " +
+                                    "LEFT JOIN FETCH s.category " +
+                                    "LEFT JOIN FETCH s.tags " +
+                                    "WHERE s.language.id = :languageId",
                             Snippet.class
                     )
                     .setParameter("languageId", languageId)
@@ -95,16 +126,18 @@ public class SnippetDAO extends GenericDAO<Snippet> {
 
     /**
      * Busca snippets por categoría.
-     *
-     * @param categoryId id de la categoría
-     * @return lista de snippets de esa categoría
      */
     public List<Snippet> findByCategory(Long categoryId) {
         EntityManager em = HibernateUtil.getEntityManager();
 
         try {
             return em.createQuery(
-                            "SELECT s FROM Snippet s WHERE s.category.id = :categoryId",
+                            "SELECT DISTINCT s FROM Snippet s " +
+                                    "LEFT JOIN FETCH s.user " +
+                                    "LEFT JOIN FETCH s.language " +
+                                    "LEFT JOIN FETCH s.category " +
+                                    "LEFT JOIN FETCH s.tags " +
+                                    "WHERE s.category.id = :categoryId",
                             Snippet.class
                     )
                     .setParameter("categoryId", categoryId)
@@ -116,16 +149,18 @@ public class SnippetDAO extends GenericDAO<Snippet> {
 
     /**
      * Busca snippets que tengan una etiqueta concreta.
-     *
-     * @param tagName nombre de la etiqueta
-     * @return lista de snippets asociados a esa etiqueta
      */
     public List<Snippet> findByTagName(String tagName) {
         EntityManager em = HibernateUtil.getEntityManager();
 
         try {
             return em.createQuery(
-                            "SELECT s FROM Snippet s JOIN s.tags t " +
+                            "SELECT DISTINCT s FROM Snippet s " +
+                                    "LEFT JOIN FETCH s.user " +
+                                    "LEFT JOIN FETCH s.language " +
+                                    "LEFT JOIN FETCH s.category " +
+                                    "LEFT JOIN FETCH s.tags tagsFetched " +
+                                    "JOIN s.tags t " +
                                     "WHERE LOWER(t.name) = LOWER(:tagName)",
                             Snippet.class
                     )
