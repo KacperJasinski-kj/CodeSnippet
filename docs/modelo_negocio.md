@@ -72,7 +72,7 @@ El sistema almacena la siguiente información:
 
 * Nombre
 * Correo electrónico
-* Curso o grupo académico
+* Curso académico
 
 ### Lenguajes
 
@@ -102,17 +102,21 @@ El sistema almacena la siguiente información:
 
 # 6. Reglas de negocio
 
-Las principales reglas de negocio son:
+Las principales reglas de funcionamiento son:
 
 * Todo snippet debe tener un título.
-* Todo snippet debe pertenecer a un usuario.
-* Todo snippet debe tener un lenguaje asociado.
-* Todo snippet debe tener una categoría asociada.
+* Todo snippet debe tener una descripción.
+* Todo snippet debe contener código fuente.
+* Todo snippet debe estar asociado a un usuario.
+* Todo snippet debe estar asociado a un lenguaje.
+* Todo snippet debe estar asociado a una categoría.
+* Un usuario puede tener varios snippets.
+* Un lenguaje puede estar asociado a varios snippets.
+* Una categoría puede estar asociada a varios snippets.
 * Un snippet puede tener varias etiquetas.
-* Una etiqueta puede utilizarse en varios snippets.
+* Una etiqueta puede estar asociada a varios snippets.
 * No pueden existir dos lenguajes con el mismo nombre.
 * No pueden existir dos categorías con el mismo nombre.
-* No pueden existir dos etiquetas con el mismo nombre.
 * El correo electrónico de un usuario debe ser único.
 
 ---
@@ -134,18 +138,21 @@ La utilización de CodeSnippet Manager aporta las siguientes ventajas:
 
 La primera versión del proyecto incluye:
 
-* Aplicación de escritorio Java Swing.
+* Aplicación de escritorio desarrollada con Java Swing.
 * Persistencia de datos mediante Hibernate.
 * Base de datos MySQL.
-* Arquitectura MVC.
+* Gestión de snippets, usuarios, categorías, lenguajes y etiquetas.
 * Operaciones CRUD completas sobre todas las entidades.
+* Relación muchos a muchos entre snippets y etiquetas.
 
 No se contempla en esta versión:
 
 * Aplicación web.
-* Gestión de permisos avanzados.
+* Gestión de usuarios con autenticación.
+* Gestión de permisos.
 * Compartición de snippets entre usuarios.
 * Almacenamiento en la nube.
+* Exportación de snippets.
 
 ---
 
@@ -154,14 +161,16 @@ No se contempla en esta versión:
 * Java 21
 * Java Swing
 * Hibernate ORM
-* JPA (Jakarta Persistence)
+* Jakarta Persistence (JPA)
 * MySQL
 * Maven
-* Patrón MVC
-* Git y GitHub
+* Git
+* GitHub
 
 ---
 
 # 10. Conclusión
 
-CodeSnippet Manager es una herramienta diseñada para facilitar la gestión y reutilización de fragmentos de código. Gracias a su sistema de clasificación mediante lenguajes, categorías y etiquetas, permite mantener organizado el conocimiento técnico generado durante el desarrollo de software y el aprendizaje de programación.
+CodeSnippet Manager es una herramienta diseñada para facilitar la gestión y reutilización de fragmentos de código. Gracias a su sistema de clasificación mediante usuarios, lenguajes, categorías y etiquetas, permite mantener organizado el conocimiento técnico generado durante el aprendizaje y desarrollo de aplicaciones.
+
+La utilización de Hibernate simplifica la persistencia de datos, mientras que Java Swing proporciona una interfaz gráfica sencilla para realizar las operaciones de gestión de forma intuitiva.
