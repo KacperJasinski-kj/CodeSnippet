@@ -32,31 +32,6 @@ public class GenericDAO<T> {
     }
 
     /**
-     * Guarda una entidad nueva en la base de datos.
-     *
-     * Se usa normalmente desde los Service.
-     *
-     * @param entity entidad que se quiere guardar
-     */
-    public void save(T entity) {
-        EntityManager em = HibernateUtil.getEntityManager();
-        EntityTransaction tx = em.getTransaction();
-
-        try {
-            tx.begin();
-            em.persist(entity);
-            tx.commit();
-        } catch (RuntimeException e) {
-            if (tx.isActive()) {
-                tx.rollback();
-            }
-            throw e;
-        } finally {
-            em.close();
-        }
-    }
-
-    /**
      * Guarda o actualiza una entidad.
      *
      * Este método es útil para los paneles Swing, porque tus Panel llaman
@@ -95,25 +70,6 @@ public class GenericDAO<T> {
      * @param entity entidad con los nuevos datos
      * @return entidad actualizada
      */
-    public T update(T entity) {
-        return saveOrUpdate(entity);
-    }
-
-    /**
-     * Busca una entidad por su identificador.
-     *
-     * @param id identificador de la entidad
-     * @return entidad encontrada o null si no existe
-     */
-    public T findById(Long id) {
-        EntityManager em = HibernateUtil.getEntityManager();
-
-        try {
-            return em.find(entityClass, id);
-        } finally {
-            em.close();
-        }
-    }
 
     /**
      * Lista todos los registros de una entidad.
@@ -126,37 +82,6 @@ public class GenericDAO<T> {
         try {
             String jpql = "SELECT e FROM " + entityClass.getSimpleName() + " e";
             return em.createQuery(jpql, entityClass).getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    /**
-     * Elimina una entidad usando su ID.
-     *
-     * Se usa normalmente desde los Service.
-     *
-     * @param id identificador de la entidad que se quiere eliminar
-     */
-    public void delete(Long id) {
-        EntityManager em = HibernateUtil.getEntityManager();
-        EntityTransaction tx = em.getTransaction();
-
-        try {
-            tx.begin();
-
-            T entity = em.find(entityClass, id);
-
-            if (entity != null) {
-                em.remove(entity);
-            }
-
-            tx.commit();
-        } catch (RuntimeException e) {
-            if (tx.isActive()) {
-                tx.rollback();
-            }
-            throw e;
         } finally {
             em.close();
         }

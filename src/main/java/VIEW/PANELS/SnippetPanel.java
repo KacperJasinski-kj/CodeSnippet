@@ -59,8 +59,54 @@ public class SnippetPanel extends JPanel {
         btnEdit.addActionListener(e -> abrirDialogoModificar());
         btnDelete.addActionListener(e -> eliminarSnippet());
 
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+
+                if (e.getClickCount() == 2) {
+
+                    int row = table.getSelectedRow();
+
+                    if (row == -1) {
+                        return;
+                    }
+
+                    Integer id = (Integer) model.getValueAt(row, 0);
+
+                    Snippet snippet = snippetDAO.findAll()
+                            .stream()
+                            .filter(s -> s.getId().equals(id))
+                            .findFirst()
+                            .orElse(null);
+
+                    if (snippet != null) {
+
+                        JTextArea area = new JTextArea(
+                                snippet.getSourceCode()
+                        );
+
+                        area.setEditable(false);
+                        area.setCaretPosition(0);
+
+                        JScrollPane scroll = new JScrollPane(area);
+                        scroll.setPreferredSize(new Dimension(700, 400));
+
+                        JOptionPane.showMessageDialog(
+                                SnippetPanel.this,
+                                scroll,
+                                snippet.getTitle(),
+                                JOptionPane.INFORMATION_MESSAGE
+                        );
+                    }
+                }
+            }
+        });
+
         cargarTodos();
     }
+
+
 
     private void cargarTodos() {
         model.setRowCount(0);
