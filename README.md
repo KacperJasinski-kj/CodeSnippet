@@ -24,8 +24,7 @@ Technologies used:
 
 
 Made by:
-Kacper Jasinski 
-Saúl Hernández
+Kacper Jasinski, Saúl Hernández
 
 ---
 
@@ -52,5 +51,4 @@ Tecnologías utilizadas:
 * Plantuml
 
 Hecho por:
-Kacper Jasinski 
-Saúl Hernández
+Kacper Jasinski, Saúl Hernández
