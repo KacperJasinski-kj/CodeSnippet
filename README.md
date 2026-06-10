@@ -22,7 +22,7 @@ Technologies used:
 * Maven
 * Plantuml
 
-
+Contact: kacperjasinskibusiness@gmail.com
 Made by:
 Kacper Jasinski, Saúl Hernández
 
@@ -50,5 +50,6 @@ Tecnologías utilizadas:
 * Maven
 * Plantuml
 
+Contacto: kacperjasinskibusiness@gmail.com
 Hecho por:
 Kacper Jasinski, Saúl Hernández
